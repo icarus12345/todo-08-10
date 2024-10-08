@@ -17,17 +17,54 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu"
-
-import { labels } from "../data/data"
+import { ITask, TaskStatus } from "@domain"
+import { statuses } from "../data/data"
+import { TaskService } from "@service"
+import { toast } from "@/hooks/use-toast"
 
 interface DataTableRowActionsProps<TData> {
-  row: Row<TData>
+  row: Row<TData>,
+  renderValue: any
 }
 
 export function DataTableRowActions<TData>({
   row,
+  renderValue,
 }: DataTableRowActionsProps<TData>) {
-  const task = row.original
+  const task: ITask = row.original
+  console.log(row,renderValue);
+  
+  const handleDeleteTask = () => {
+    TaskService.delete(task)
+    .then((task: ITask) => {
+      toast({
+        title: "Delete Task success"
+      })
+    }, () => {
+      toast({
+        variant: "destructive",
+        title: "Delete Task failed"
+      })
+    })
+  }
+
+  const handleUpdateStatusTask = (status: TaskStatus) => {
+    TaskService.updateStatus(task, status)
+    .then(() => {
+      task.status = status
+      row.renderValue('status')
+      renderValue('status')
+      renderValue()
+      toast({
+        title: "Update Status success"
+      })
+    }, () => {
+      toast({
+        variant: "destructive",
+        title: "Update Status failed"
+      })
+    })
+  }
 
   return (
     <DropdownMenu>
@@ -41,24 +78,24 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
+        <DropdownMenuItem disabled>Edit</DropdownMenuItem>
+        <DropdownMenuItem disabled>Make a copy</DropdownMenuItem>
+        <DropdownMenuItem disabled>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
+            <DropdownMenuRadioGroup value={task.status}>
+              {statuses.map((status) => (
+                <DropdownMenuRadioItem key={status.value} value={status.value} onClick={() => handleUpdateStatusTask(status.value)}>
+                  {status.label}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDeleteTask} disabled>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

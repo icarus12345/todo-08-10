@@ -6,8 +6,29 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Directory 構成
 
-## Expanding the ESLint configuration
+```
+src
+┣ application
+┃ ┣ domain
+┃ ┣ repository
+┃ ┣ services
+┃ ┗ usecase
+┃ components
+┃ ┗ ui
+┣ gateways
+┃ ┣ adapters
+┃ ┗ transform
+┣ hook
+┣ layout
+┣ lib
+┣ pages
+  ┣ tasks
+  ┗ not-found.tsx
+```
+
+### Expanding the ESLint configuration
 
 1. create `.env` file or copy from `.env.example` 
 ```

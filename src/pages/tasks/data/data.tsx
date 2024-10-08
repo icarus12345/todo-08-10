@@ -8,6 +8,8 @@ import {
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons"
+import { TaskPriorities, TaskStatus } from '@domain'
+import { ITask } from "@domain"
 
 export const labels = [
   {
@@ -26,27 +28,27 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "backlog",
+    value: TaskStatus.backlog,
     label: "Backlog",
     icon: QuestionMarkCircledIcon,
   },
   {
-    value: "todo",
+    value: TaskStatus.todo,
     label: "Todo",
     icon: CircleIcon,
   },
   {
-    value: "in progress",
+    value: TaskStatus['in-progress'],
     label: "In Progress",
     icon: StopwatchIcon,
   },
   {
-    value: "done",
+    value: TaskStatus.done,
     label: "Done",
     icon: CheckCircledIcon,
   },
   {
-    value: "canceled",
+    value: TaskStatus.canceled,
     label: "Canceled",
     icon: CrossCircledIcon,
   },
@@ -55,17 +57,17 @@ export const statuses = [
 export const priorities = [
   {
     label: "Low",
-    value: "low",
+    value: TaskPriorities.low,
     icon: ArrowDownIcon,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: TaskPriorities.medium,
     icon: ArrowRightIcon,
   },
   {
     label: "High",
-    value: "high",
+    value: TaskPriorities.high,
     icon: ArrowUpIcon,
   },
 ]

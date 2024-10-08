@@ -59,10 +59,7 @@ export function TaskForm({ onAddTaskSuccess }) {
     defaultValues,
   })
 
-  function onSubmit(task: ITask) {
-    // const task: ITask = {}
-    console.log(form);
-    
+  const onSubmit = (task: ITask) => {
     TaskService.create(task)
     .then((task: ITask) => {
       form.reset()

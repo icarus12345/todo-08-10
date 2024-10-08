@@ -4,11 +4,10 @@ import { TaskForm } from "./components/task-form"
 import { UserNav } from "./components/user-nav"
 import { ITask } from "@domain"
 import { TaskService } from "@service"
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function TaskPage() {
   const [tasks, setTasks] = useState<ITask[]>([])
-
   useEffect(() => {
     TaskService.getList()
     .then((_tasks: ITask[]) => {
