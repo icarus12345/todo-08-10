@@ -6,7 +6,7 @@ import { Table } from "@tanstack/react-table"
 import { Button } from "@ui/button"
 import { Input } from "@ui/input"
 import { DataTableViewOptions } from "./data-table-view-options"
-
+import { ITask } from '@domain'
 import { priorities, statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { TaskDetailDialog } from "./task-dialog"
@@ -19,7 +19,9 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
-
+  const onAddTaskCallback = (task: ITask) => {
+    table.options.meta?.reload()
+  }
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
@@ -57,7 +59,7 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <DataTableViewOptions table={table} />
-      <TaskDetailDialog/>
+      <TaskDetailDialog onAddTaskSuccess={onAddTaskCallback}/>
     </div>
   )
 }

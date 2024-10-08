@@ -24,19 +24,19 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table"
-
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
+import { ITask } from "@domain"
+import { TaskService } from "@service"
+import { useEffect, useState, forwardRef, useRef, useImperativeHandle } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
 }
-
-export function DataTable<TData, TValue>({
+export const DataTable = forwardRef(({
   columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<unknown, unknown>, ref) => {
+  const [cache, setCache] = useState(0);
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -44,9 +44,22 @@ export function DataTable<TData, TValue>({
     []
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [data, setData] = useState<ITask[]>([])
+  useEffect(() => {
+    TaskService.getList()
+    .then((_tasks: ITask[]) => {
+      setData(_tasks)
+    })
+  }, [cache])
+
+  useImperativeHandle(ref, () => ({
+    reload() {
+      setCache(new Date().getTime())
+    }
+  }));
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     state: {
       sorting,
@@ -65,6 +78,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    meta: {
+      reload: () => {
+        setCache(new Date().getTime())
+      },
+    },
   })
 
   return (
@@ -123,4 +141,4 @@ export function DataTable<TData, TValue>({
       <DataTablePagination table={table} />
     </div>
   )
-}
+})

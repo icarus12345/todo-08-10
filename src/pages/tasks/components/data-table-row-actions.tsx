@@ -1,7 +1,7 @@
 "use client"
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { Row } from "@tanstack/react-table"
+import { Row, RowData } from "@tanstack/react-table"
 
 import { Button } from "@ui/button"
 import {
@@ -24,19 +24,25 @@ import { toast } from "@/hooks/use-toast"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>,
-  renderValue: any
+  table: any
+}
+
+declare module '@tanstack/react-table' {
+  interface TableMeta<TData extends RowData> {
+    reload: () => void
+  }
 }
 
 export function DataTableRowActions<TData>({
   row,
-  renderValue,
+  table,
 }: DataTableRowActionsProps<TData>) {
   const task: ITask = row.original
-  console.log(row,renderValue);
-  
+
   const handleDeleteTask = () => {
     TaskService.delete(task)
     .then((task: ITask) => {
+      table.options.meta?.reload()
       toast({
         title: "Delete Task success"
       })
@@ -51,10 +57,7 @@ export function DataTableRowActions<TData>({
   const handleUpdateStatusTask = (status: TaskStatus) => {
     TaskService.updateStatus(task, status)
     .then(() => {
-      task.status = status
-      row.renderValue('status')
-      renderValue('status')
-      renderValue()
+      table.options.meta?.reload()
       toast({
         title: "Update Status success"
       })
@@ -95,7 +98,7 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleDeleteTask} disabled>
+        <DropdownMenuItem onClick={handleDeleteTask}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

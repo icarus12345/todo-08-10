@@ -11,11 +11,13 @@ import {
 import { Button } from '@ui/button'
 import { TaskForm } from "./task-form"
 import { useState } from 'react'
+import { ITask } from '@domain'
 
-export function TaskDetailDialog() {
+export function TaskDetailDialog({ onAddTaskSuccess }) {
   const [open, setOpen] = useState(false)
   const onAddTaskCallback = (task: ITask) => {
     setOpen(false)
+    onAddTaskSuccess(task)
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -26,7 +28,7 @@ export function TaskDetailDialog() {
         <DialogHeader>
           <DialogTitle>Add a Task</DialogTitle>
           <DialogDescription>
-            Bonus function, so the list task don't reload data after add new task from the modal.
+            Bonus function
           </DialogDescription>
         </DialogHeader>
         <TaskForm onAddTaskSuccess={onAddTaskCallback} />

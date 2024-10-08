@@ -118,6 +118,6 @@ export const columns: ColumnDef<ITask>[] = [
   },
   {
     id: "actions",
-    cell: ({ row, renderValue }) => <DataTableRowActions row={row} renderValue={renderValue} />,
+    cell: ({ row, table }) => <DataTableRowActions row={row} table={table} />,
   },
 ]
